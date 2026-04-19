@@ -1,4 +1,4 @@
-script_key="";
+script_key="ACGvMgvNJEAyeYcGqLsIijPXJpJDpJRF";
 getgenv().Config = {
 
     --=============== World Configuration ===============--
@@ -17,6 +17,7 @@ getgenv().Config = {
         ["MainTool"] = {     -- Tools to use for activating passives
             "Strongest In History", 
             "Ice Queen", 
+             "Atomic",
         },
     },
     Auto_Reroll_Stats = { -- Stats to reroll to SSS - Z
@@ -26,7 +27,7 @@ getgenv().Config = {
         ["CritChance"] = true,
         ["Defense"] = false,
         ["CooldownReduction"] = false,
-        ["DamageReduction"] = false,
+        ["DamageReduction"] = true,
     },
     Specific_Trait = {"Emperor"}, -- Find Target Trait
     Specific_Clan = {"Eminence"}, -- Left {} if you want any legendary clan
