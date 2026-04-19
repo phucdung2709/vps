@@ -1,0 +1,62 @@
+script_key="ACGvMgvNJEAyeYcGqLsIijPXJpJDpJRF";
+getgenv().Config = {
+    -- Main Tool
+    MainTool = "Strongest In History", -- Set Main Tool
+
+    -- Weapon 
+    ["True Aizen"] = false,
+    ["Atomic"] = true,
+
+    -- Auto F
+    ["True Aizen F Mastery"] = false,
+    ["Atomic F Mastery"] = true,
+    ["Sukuna F Mastery"] = true,
+    ["Strongest Shinobi F Mastery"] = false,
+    ["Saber Alter F Mastery"] = false,
+    ["Blessed Maiden F Mastery"] = false,
+
+    -- Logger
+    ["Log"] = {
+        Horst = false, -- Log Horst
+        RAM = false, -- Log Roblox Account Manager
+        Custom = {
+            MainWeapon = false,
+            Rank = false,
+            Race = false,
+            Clan = false,
+            DamagePercent = false,
+            LuckPercent = false,
+            Haki = false,
+            Level = false,
+            Currencies = false,
+            Weapon = {
+                ["Dark Blade"] = false,
+                ["Gryphon"] = false,
+                ["Ichigo"] = false,
+                ["Aizen"] = false,
+                ["Shadow"] = false,
+                ["Rimuru"] = false,
+                ["Strongest In History"] = false,
+                ["Blessed Maiden"] = false,
+                ["Saber Alter"] = false,
+                ["Strongest Shinobi"] = false,
+                ["Abyssal Empress"] = false,
+                ["Moon Slayer"] = false,
+                ["Ice Queen"] = false,
+                ["Atomic"] = false,
+                ["True Aizen"] = false,
+            },
+            Items = {
+                "Race Reroll",
+                "Trait Reroll",
+                "Clan Reroll",
+            },
+        }
+    },
+
+    ["Require_Private_Server"] = {
+        Kick = false, -- Auto Kick Player if not in Private Server
+        LeaveServer = false, -- Auto Leave Server and return to home page if not in Private Server
+    }
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/37f95c6ed31c7b8d1fd90087f377655d.lua"))()
