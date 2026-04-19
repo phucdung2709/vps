@@ -205,4 +205,4 @@ getgenv().Config = {
         LeaveServer = false, -- Auto Leave Server and return to home page if not in Private Server
     }
 }
-loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/440cf02b904c69d65272944fd11ff836.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/5c0076dae2c2439f0007622880ecfe43.lua"))()
