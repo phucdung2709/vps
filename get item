@@ -1,4 +1,4 @@
-script_key="ACGvMgvNJEAyeYcGqLsIijPXJpJDpJRF";
+script_key="AqKsFHYrcKemuDpivTgJstPiznzfNBjq";
 getgenv().Config = {
     -- Main Tool
     MainTool = "Strongest In History", -- Set Main Tool
