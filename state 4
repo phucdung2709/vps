@@ -39,6 +39,7 @@ getgenv().Config = {
         ["Weapon"] = {
             "Strongest In History",
             "Ice Queen",
+            "Atomic"
         }
     },
     Auto_E10_Accessory = {
