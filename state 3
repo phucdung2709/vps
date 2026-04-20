@@ -10,6 +10,7 @@ getgenv().Config = {
         ["LockRace"] = "Luckborn", -- Lock to specific race
         ["Accessory"] = "Auto", -- Accessory to use, set to "None" to ignore accessory
         ["LockBloodline"] = "Primordial", -- Lock to specific bloodline, set to "None" to ignore bloodline
+        ["LockRelic"] = "LuckRelic", -- Lock to specific relic, set to "None" to ignore relic
     },
     Auto_Passive = {
         ["Enable"] = true, -- Need to enable this to use below features
@@ -17,7 +18,6 @@ getgenv().Config = {
         ["MainTool"] = {     -- Tools to use for activating passives
             "Strongest In History", 
             "Ice Queen", 
-             "Atomic",
         },
     },
     Auto_Reroll_Stats = { -- Stats to reroll to SSS - Z
@@ -25,8 +25,8 @@ getgenv().Config = {
         ["Luck"] = true,
         ["CritDamage"] = true,
         ["CritChance"] = true,
-        ["Defense"] = false,
-        ["CooldownReduction"] = false,
+        ["Defense"] = true,
+        ["CooldownReduction"] = true,
         ["DamageReduction"] = true,
     },
     Specific_Trait = {"Emperor"}, -- Find Target Trait
@@ -40,13 +40,12 @@ getgenv().Config = {
         ["Weapon"] = {
             "Strongest In History",
             "Ice Queen",
-             "Atomic",
         }
     },
     Auto_E10_Accessory = {
-        ["Enable"] = false, -- Need to enable this to use below features
-        ["Boss"] = "IceQueenBoss", -- Boss to farm accessory
-        ["Accessory"] = "Ice Queen Outfit", -- Target Accessory to enchant
+        ["Enable"] = true, -- Need to enable this to use below features
+        ["Boss"] = "TheWorldBoss", -- Boss to farm accessory
+        ["Accessory"] = "World Outfit", -- Target Accessory to enchant
     },
 
     --============= MULTI-ISLAND FARM CONFIG =============--
@@ -59,7 +58,7 @@ getgenv().Config = {
     --============= ADVANCED WORLD BOSS CONFIG =============--
     WorldBoss_Configuration = {
         ["Enable"] = true, -- Need to enable this to use below features
-        ["MainTool"] = "Ice Queen", -- Tool to use for farming world boss
+        ["MainTool"] = "True Aizen", -- Tool to use for farming world boss
         ["WhiteList_Abilities"] = {3,2}, -- Only use these abilities
     },
     Blacklist_Bosses = { -- WARNING DISABLE SOME BOSS YOU WON'T GET ITEM FOR WEAPON/RANK ASCEND
@@ -89,6 +88,7 @@ getgenv().Config = {
         ["MoonSlayerBoss"] = false,
         ["TheWorldBoss"] = false,
         ["IceQueenBoss"] = false,
+        ["CosmicBeingBoss"] = false,
     },
     Keep_Summon_Boss = {  -- Keep Summon Bosses since you got all items
         ["SaberBoss"] = false,
@@ -100,17 +100,17 @@ getgenv().Config = {
         ["BlessedMaidenBoss"] = false,
         ["SaberAlterBoss"] = false,
         ["MoonSlayerBoss"] = false,
-        ["IceQueenBoss"] = true,
+        ["IceQueenBoss"] = false,
         ["AnosBoss"] = false,
-        ["GreatMageBoss"] = true,
-        ["TheWorldBoss"] = true,
+        ["GreatMageBoss"] = false,
+        ["TheWorldBoss"] = false,
         ["AtomicBoss"] = false,
     },
 
     --============= DUNGEON CONFIG =============--    
     Dungeon_Configuration = { -- If reached this rank do BossRush/Tower until out of keys
         ["Enable"] = false, -- Need to enable this to use below features
-        ["Rank"] = {"Ascend IX"}, -- IF RANK MATCHED, DO BOSS RUSH/TOWER
+        ["Rank"] = {"Ascend X"}, -- IF RANK MATCHED, DO BOSS RUSH/TOWER
         ["BossRush"] = {
             ["Enable"] = false,
             ["Build"] = "Damage",
@@ -150,6 +150,14 @@ getgenv().Config = {
             ["HP"] = false,
         }
     },
+    Auto_Upgrade_Easter = { -- Upgrade tower stats when maxed its stop
+        ["Enable"] = true, -- Need to enable this to use below features
+        ["Stats"] = {
+            ["EggDropChance"] = true,
+            ["EggBonus"] = true,
+            ["BossLuck"] = true,
+        }
+    },
     Max_Rune_Level = true, -- Auto Upgrade Rune to max level
 
     --============= ITEM USING CONFIG =============--
@@ -167,6 +175,7 @@ getgenv().Config = {
         Horst = false, -- Log Horst
         RAM = false, -- Log RAM
         Custom = {
+            ["TrackSea"] = false,
             ["MainWeapon"] = false,
             ["Rank"] = false,
             ["Race"] = false,
@@ -174,6 +183,7 @@ getgenv().Config = {
             ["Clan"] = false,
             ["Trait"] = false,
             ["Power"] = false,
+            ["Bloodline"] = false,
             ["DamagePercent"] = false,
             ["LuckPercent"] = false,
             ["Haki"] = false,
@@ -194,6 +204,10 @@ getgenv().Config = {
                 ["Abyssal Empress"] = false,
                 ["Moon Slayer"] = false,
                 ["Ice Queen"] = false,
+                ["Great Mage"] = false,
+                ["TheWorld"] = false,
+                ["Cosmic Being"] = false,
+                ["Dragon Goddess"] = false,
                 ["Atomic"] = false,
                 ["True Aizen"] = false,
             },
