@@ -234,32 +234,5 @@ getgenv().Config = {
         LeaveServer = false, -- Auto Leave Server and return to home page if not in Private Server
     }
 }
-local LOADER_URL = "https://api.luarmor.net/files/v4/loaders/6448cfb42f495f885b9bab78ad2e244c.lua"
-local RETRY_DELAY = 5
-task.spawn(function()
-    local attempt = 0
-    while true do
-        attempt = attempt + 1
-        local okHttp, source = pcall(function()
-            return game:HttpGet(LOADER_URL)
-        end)
-        if okHttp and type(source) == "string" and #source > 0 then
-            local fn, errLoad = loadstring(source)
-            if fn then
-                local okRun, errRun = pcall(fn)
-                if okRun then
-                    print(("[Loader] Load thành công ở lần thử %d"):format(attempt))
-                    return
-                else
-                    warn(("[Loader] Lần %d chạy lỗi: %s"):format(attempt, tostring(errRun)))
-                end
-            else
-                warn(("[Loader] Lần %d loadstring fail: %s"):format(attempt, tostring(errLoad)))
-            end
-        else
-            warn(("[Loader] Lần %d HttpGet fail: %s"):format(attempt, tostring(source)))
-        end
-        warn(("[Loader] Retry sau %d giây..."):format(RETRY_DELAY))
-        task.wait(RETRY_DELAY)
-    end
-end)
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/6448cfb42f495f885b9bab78ad2e244c.lua"))()
+
