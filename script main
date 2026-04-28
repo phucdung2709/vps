@@ -1,1 +1,156 @@
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
 
+local MAX_TELEPORT_ATTEMPTS = 5
+local TELEPORT_KEY = "ServerHopCount_" .. game.PlaceId
+
+local function GetTeleportCount()
+    local count = 0
+    pcall(function()
+        local saved = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild(TELEPORT_KEY)
+        if saved then
+            count = tonumber(saved.Value) or 0
+        end
+    end)
+
+    if count == 0 then
+        pcall(function()
+            if _G[TELEPORT_KEY] then
+                count = _G[TELEPORT_KEY]
+            end
+        end)
+    end
+
+    return count
+end
+
+local function SetTeleportCount(count)
+    _G[TELEPORT_KEY] = count
+end
+
+local function TeleportToNewServer()
+    local success = false
+
+    pcall(function()
+        local Net = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Net"))
+        Net:RemoteEvent("TeleportService/Reconnect"):FireServer()
+        success = true
+    end)
+
+    if not success then
+        pcall(function()
+            for _, child in ipairs(ReplicatedStorage.Packages.Net:GetDescendants()) do
+                if child:IsA("RemoteEvent") and child.Name:find("TeleportService") and child.Name:find("Reconnect") then
+                    child:FireServer()
+                    success = true
+                    break
+                end
+            end
+        end)
+    end
+
+    if not success then
+        pcall(function()
+            TeleportService:Teleport(game.PlaceId, LocalPlayer)
+        end)
+    end
+end
+
+local teleportCount = GetTeleportCount()
+local otherPlayers = #Players:GetPlayers() - 1
+
+if otherPlayers > 0 then
+    teleportCount = teleportCount + 1
+    SetTeleportCount(teleportCount)
+
+    if teleportCount > MAX_TELEPORT_ATTEMPTS then
+        LocalPlayer:Kick("Da thu " .. MAX_TELEPORT_ATTEMPTS .. " lan nhung khong tim duoc server trong. Vui long thu lai sau.")
+    else
+        warn("[ServerHop] Co " .. otherPlayers .. " nguoi khac trong server. Dang chuyen server... (Lan " .. teleportCount .. "/" .. MAX_TELEPORT_ATTEMPTS .. ")")
+        TeleportToNewServer()
+    end
+else
+    SetTeleportCount(0)
+    warn("[ServerHop] Server trong! Chi co ban. Bat dau chay script chinh...")
+
+    getgenv().NousigiConfig = {
+        Key = "k19550553428fd308f4223ad",
+        Config = {
+            ["Gameplay"] = {
+                ["Server Type"] = "Private",
+                ["Collect Cash Cap"] = "1T",
+                ["Max Auctioning Multiplier"] = 10,
+                ["Lock Base Extra Time"] = 5
+            },
+            ["Misc"] = {
+                ["Kick if Ping above"] = 2e15,
+                ["Kick if FPS below"] = 0,
+                ["Max Rebirth"] = 4,
+                ["Rare Animal Generation"] = "30M",
+                ["Only keep Secret if Cash Cap"] = true,
+                ["Ignore Secret"] = {
+                    ["La Cucaracha"] = {"All"}, ["Job Job Job Sahur"] = {"All"}, ["Las Tralaleritas"] = {"All"},
+                    ["To to to Sahur"] = {"All"}, ["Trickolino"] = {"All"}, ["Dul Dul Dul"] = {"All"},
+                    ["Zombie Tralala"] = {"All"}, ["Los Tralaleritos"] = {"All"}, ["Guerriro Digitale"] = {"All"},
+                    ["La Vacca Saturno Saturnita"] = {"All"}, ["Karkerkar Kurkur"] = {"All"}, ["Chachechi"] = {"All"},
+                    ["Graipuss Medussi"] = {"All"}, ["GOAT"] = {"All"}, ["Fishboard"] = {"All"},
+                },
+                ["Auto Fuse"] = {
+                    ["Enable"] = true,
+                    ["Fuse Animal"] = {}
+                },
+                ["Buy Lucky Block"] = {
+                    "Heart Lucky Block",
+                    "Premium Heart Lucky Block",
+                    "Heart Lucky Blocks",
+                    "Secret Lucky Block",
+                    "Taco Lucky Block",
+                    "Los Taco Blocks",
+                    "Admin Lucky Block",
+                    "Leprechaun Lucky Block",
+                    "Egg Lucky Block",
+                    "Egg Lucky Blocks",
+                },
+                ["Open Lucky Block"] = {
+                    "Admin Lucky Block", "Los Lucky Blocks", "Taco Lucky Block",
+                    "Los Taco Blocks", "Spooky Lucky Block", "Festive Lucky Block",
+                    "Heart Lucky Block",
+                    "Premium Heart Lucky Block",
+                    "Heart Lucky Blocks",
+                    "Leprechaun Lucky Block",
+                },
+                ["Rare Lucky Block"] = { "Secret Lucky Block" }
+            },
+            ["Performance"] = {
+                ["FPS Cap"] = 10,
+                ["Black Screen"] = true
+            },
+            ["Webhook"] = {
+                ["Url"] = "https://discord.com/api/webhooks/1259214765641961634/srgjZz026jzHWXSjD7KCderNpRsYDuVd5g4m3KHXFnj9ZcCr1JGH2jeoxP3-ewIkhOH9",
+                ["Ignore Notify"] = {}
+            }
+        }
+    }
+
+    getgenv().Key = getgenv().NousigiConfig.Key
+    getgenv().Config = getgenv().NousigiConfig.Config
+
+    spawn(function()
+        task.wait(30)
+        if not getgenv().scriptLoaded then
+            LocalPlayer:Kick("Script load timeout\nKick to prevent animal gets stolen")
+        end
+    end)
+
+    repeat
+        wait()
+        spawn(function()
+            loadstring(game:HttpGet("https://nousigi.com/loader.lua"))()
+        end)
+        wait(20)
+    until getgenv().Joebiden
+
+    getgenv().scriptLoaded = true
+end
