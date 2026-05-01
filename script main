@@ -1,6 +1,8 @@
 script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
 
 getgenv().AUTO_REJOIN = true
+getgenv().AUTO_REJOIN_MAX_RETRIES = 10
+getgenv().AUTO_REJOIN_DELAY = 5
 
 getgenv().SpringEvent = {
    off = true,
@@ -54,15 +56,58 @@ if getgenv().AUTO_REJOIN then
     local PlaceId = game.PlaceId
     local JobId = game.JobId
 
-    local function rejoin()
-        pcall(function()
+    local MAX_RETRIES = getgenv().AUTO_REJOIN_MAX_RETRIES or 10
+    local BASE_DELAY = getgenv().AUTO_REJOIN_DELAY or 5
+
+    local isRejoining = false
+    local retryCount = 0
+
+    local function attemptTeleport()
+        local ok, err = pcall(function()
             if #Players:GetPlayers() <= 1 then
                 TeleportService:Teleport(PlaceId, LocalPlayer)
             else
                 TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
             end
         end)
+        return ok, err
     end
+
+    local function rejoin()
+        if isRejoining then return end
+        isRejoining = true
+        retryCount = 0
+
+        task.spawn(function()
+            while retryCount < MAX_RETRIES do
+                retryCount = retryCount + 1
+                warn(("[AutoRejoin] Attempt %d/%d"):format(retryCount, MAX_RETRIES))
+
+                local ok, err = attemptTeleport()
+                if not ok then
+                    warn("[AutoRejoin] Teleport call failed:", err)
+                end
+
+                local waitTime = BASE_DELAY + (retryCount * 2)
+                task.wait(waitTime)
+            end
+
+            warn("[AutoRejoin] Max retries reached, giving up.")
+            isRejoining = false
+        end)
+    end
+
+    LocalPlayer.OnTeleport:Connect(function(state)
+        if state == Enum.TeleportState.Started or state == Enum.TeleportState.InProgress then
+            isRejoining = false
+            retryCount = 0
+        elseif state == Enum.TeleportState.Failed then
+            warn("[AutoRejoin] Teleport failed, retrying...")
+            isRejoining = false
+            task.wait(2)
+            rejoin()
+        end
+    end)
 
     GuiService.ErrorMessageChanged:Connect(function(err)
         warn("[AutoRejoin] Detected error:", err)
@@ -70,14 +115,16 @@ if getgenv().AUTO_REJOIN then
         rejoin()
     end)
 
-    LocalPlayer.OnTeleport:Connect(function(state)
-        if state == Enum.TeleportState.Failed then
+    TeleportService.TeleportInitFailed:Connect(function(player, result, errorMessage)
+        if player == LocalPlayer then
+            warn("[AutoRejoin] TeleportInitFailed:", result, errorMessage)
+            isRejoining = false
             task.wait(3)
             rejoin()
         end
     end)
 
-    warn("[AutoRejoin] Enabled")
+    warn("[AutoRejoin] Enabled | MaxRetries:", MAX_RETRIES, "| BaseDelay:", BASE_DELAY)
 end
 
 loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/fc4697b9d225539da838fc74ae83aac4.lua"))()
