@@ -3,7 +3,6 @@ script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
 getgenv().AUTO_REJOIN = true
 
 getgenv().SpringEvent = {
-   off = false,
     MODE = "HATCH",
     FPS = 10,
     WORLD = 1,
