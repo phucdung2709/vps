@@ -1,6 +1,7 @@
 
 script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
 getgenv().SpringEvent = {
+   off = true,
     MODE = "HATCH",
     FPS = 10,
     WORLD = 1,
