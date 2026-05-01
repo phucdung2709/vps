@@ -1,7 +1,9 @@
-
 script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
+
+getgenv().AUTO_REJOIN = true
+
 getgenv().SpringEvent = {
-   off = true,
+   off = false,
     MODE = "HATCH",
     FPS = 10,
     WORLD = 1,
@@ -43,4 +45,39 @@ getgenv().SpringEvent = {
         ZONES = {1, 2, 3, 4, 5},
     },
 }
+
+if getgenv().AUTO_REJOIN then
+    local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local GuiService = game:GetService("GuiService")
+    local LocalPlayer = Players.LocalPlayer
+    local PlaceId = game.PlaceId
+    local JobId = game.JobId
+
+    local function rejoin()
+        pcall(function()
+            if #Players:GetPlayers() <= 1 then
+                TeleportService:Teleport(PlaceId, LocalPlayer)
+            else
+                TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
+            end
+        end)
+    end
+
+    GuiService.ErrorMessageChanged:Connect(function(err)
+        warn("[AutoRejoin] Detected error:", err)
+        task.wait(1)
+        rejoin()
+    end)
+
+    LocalPlayer.OnTeleport:Connect(function(state)
+        if state == Enum.TeleportState.Failed then
+            task.wait(3)
+            rejoin()
+        end
+    end)
+
+    warn("[AutoRejoin] Enabled")
+end
+
 loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/fc4697b9d225539da838fc74ae83aac4.lua"))()
