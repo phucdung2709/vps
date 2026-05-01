@@ -1,6 +1,6 @@
 script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
 
-getgenv().AUTO_REJOIN = true
+getgenv().AUTO_REJOIN = false
 getgenv().AUTO_REJOIN_MAX_RETRIES = 10
 getgenv().AUTO_REJOIN_DELAY = 5
 
