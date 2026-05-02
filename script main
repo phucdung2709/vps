@@ -1,130 +1,38 @@
-script_key="whWwhxdHKqULRKXfbZmsfekfoWWWrCip";
+getgenv().Config =  {
+    ["Webhook"] = {
+        ["URL"] = "URL",
+        ["Discord Id to ping"] = {""},
+        ["Send Normal Huges"] = false,
 
-getgenv().AUTO_REJOIN = false
-getgenv().AUTO_REJOIN_MAX_RETRIES = 10
-getgenv().AUTO_REJOIN_DELAY = 5
+        ["Rank Updates"] = "URL",
+        ["Rank Update Min"] = 33, -- will send rank update when reaches that ranl
 
-getgenv().SpringEvent = {
-   off = true,
-    MODE = "HATCH",
-    FPS = 10,
-    WORLD = 1,
-    UsePotions = {"Damage", "Coins", "Lucky", "Treasure Hunter"},
-    UseFlag = "Rainbow Flag",
-    EquipEnchants = {"Tap Power","Tap Power","Criticals","Strong Pets"},
-
-    MAIL_CONFIG = {
-        ["All Huges"] = {Class = "Pet", MinAmount = 1},
-        ["Spring Pink Rose Token"] = {Class = "Misc", MinAmount = 150000},
-        ["Spring Red Tulip Token"] = {Class = "Misc", MinAmount = 150000},
-        ["Spring Bluebell Token"] = {Class = "Misc", MinAmount = 150000},
+        ["Admin Abuse"] = "https://discord.com/api/webhooks/1259214765641961634/srgjZz026jzHWXSjD7KCderNpRsYDuVd5g4m3KHXFnj9ZcCr1JGH2jeoxP3-ewIkhOH9" -- send when something gets claimed
+    },
+    ["Mail Settings"] = {
+        ["User"] = "",
+        ["Min_Gems"] = 99999999999999999999,
+        ["MAX_MAIL_COST"] = 9999999999,
+        ["Mailing"] = {},
+        ["Only_New_Huges"] = false,
+    },
+    ["Auto Enchant"] = {"Treasure Hunter", "Coins", "Diamonds", "Criticals", "Strong Pets"},
+    ["Time Trial"] = {
+        ["Disabled"] = true, -- will disable Timetrial
+        ["Open Chest"] = 3, -- 1,2,3 or do false to not open
     },
 
-    USER = "XxIsaacFusionAquaxX",
-    MAX_MAIL_COST = 2000000,
-    KEEP_HUGES = 15,
+    ["CPU Saver"] = true, -- makes your game run smoother
 
-    DISCORDID = "1199217337144987649",
-    SHOW_PING_IN_GLOBAL_WEBHOOK = true,
-    URL = "",
+    ["MaxEggSlots"] = 99,
+    ["MaxPetSlots"] = 99,
 
-    UPGRADE_TARGETS = {
-        ["Easter2026Egg8HugeLuck"] = 8,
-        ["Easter2026Egg8TitanicLuck"] = 8,
-        ["Easter2026Egg8Luck"] = 8,
-        ["Easter2026Egg8ShinyLuck"] = 8,
-        ["Easter2026Egg8HatchSpeed"] = 8,
-        ["Easter2026Egg8CooldownAndAmount"] = 8,
-    },
+    ["Ignore Do Ranks"] = false, -- wont do quest at all
 
-    LUCK_MACHINE = {
-        Huge = true,
-        Titanic = true,
-        Gargantuan = true,
-    },
+    ["Fast Rankup"] = false, -- will focus on quest in world 1 until it reaches a specific rank (broken a bit)
+    ["Fast Rankup to"] = 33, -- choose your rank you want to do
 
-    FARM = {
-        ZONES = {1, 2, 3, 4, 5},
-    },
+
+    ["StarterPets"] = false, -- will hatch event pets
 }
-
-if getgenv().AUTO_REJOIN then
-    local TeleportService = game:GetService("TeleportService")
-    local Players = game:GetService("Players")
-    local GuiService = game:GetService("GuiService")
-    local LocalPlayer = Players.LocalPlayer
-    local PlaceId = game.PlaceId
-    local JobId = game.JobId
-
-    local MAX_RETRIES = getgenv().AUTO_REJOIN_MAX_RETRIES or 10
-    local BASE_DELAY = getgenv().AUTO_REJOIN_DELAY or 5
-
-    local isRejoining = false
-    local retryCount = 0
-
-    local function attemptTeleport()
-        local ok, err = pcall(function()
-            if #Players:GetPlayers() <= 1 then
-                TeleportService:Teleport(PlaceId, LocalPlayer)
-            else
-                TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
-            end
-        end)
-        return ok, err
-    end
-
-    local function rejoin()
-        if isRejoining then return end
-        isRejoining = true
-        retryCount = 0
-
-        task.spawn(function()
-            while retryCount < MAX_RETRIES do
-                retryCount = retryCount + 1
-                warn(("[AutoRejoin] Attempt %d/%d"):format(retryCount, MAX_RETRIES))
-
-                local ok, err = attemptTeleport()
-                if not ok then
-                    warn("[AutoRejoin] Teleport call failed:", err)
-                end
-
-                local waitTime = BASE_DELAY + (retryCount * 2)
-                task.wait(waitTime)
-            end
-
-            warn("[AutoRejoin] Max retries reached, giving up.")
-            isRejoining = false
-        end)
-    end
-
-    LocalPlayer.OnTeleport:Connect(function(state)
-        if state == Enum.TeleportState.Started or state == Enum.TeleportState.InProgress then
-            isRejoining = false
-            retryCount = 0
-        elseif state == Enum.TeleportState.Failed then
-            warn("[AutoRejoin] Teleport failed, retrying...")
-            isRejoining = false
-            task.wait(2)
-            rejoin()
-        end
-    end)
-
-    GuiService.ErrorMessageChanged:Connect(function(err)
-        warn("[AutoRejoin] Detected error:", err)
-        task.wait(1)
-        rejoin()
-    end)
-
-    TeleportService.TeleportInitFailed:Connect(function(player, result, errorMessage)
-        if player == LocalPlayer then
-            warn("[AutoRejoin] TeleportInitFailed:", result, errorMessage)
-            isRejoining = false
-            task.wait(3)
-            rejoin()
-        end
-    end)
-
-    warn("[AutoRejoin] Enabled | MaxRetries:", MAX_RETRIES, "| BaseDelay:", BASE_DELAY)
-end
-
-loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/fc4697b9d225539da838fc74ae83aac4.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/cd6279ef22ef689bec5cd78c7cd2f0a1.lua"))()
